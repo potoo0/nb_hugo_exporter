@@ -1,3 +1,5 @@
+Forked from [jbandlow/nb_hugo_exporter](https://github.com/jbandlow/nb_hugo_exporter)
+
 # Export Notebooks To Hugo Compatible Markdown
 
 ## Basic Installation and Use

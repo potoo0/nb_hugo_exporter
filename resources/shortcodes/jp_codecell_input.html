@@ -1,0 +1,18 @@
+{{- /*
+Renders an jupyter codecell input.
+
+@param {int}    [ecnt] execution count
+
+@returns {template.HTML}
+
+@example {{< jp_codecell_input >}}
+@example {{< jp_codecell_input ecnt=1 >}}
+*/}}
+
+<!-- Get arguments-->
+{{- $ecnt := or (.Get "ecnt") (.Get 0) 0 }}
+
+<div class="jp-codecell jp-codecell-input">
+  <div class="jp-prompt jp-InputPrompt">In&nbsp;[{{ $ecnt }}]:</div>
+  {{ .Inner | strings.TrimSpace | .Page.RenderString }}
+</div>

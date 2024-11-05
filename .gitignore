@@ -1,3 +1,8 @@
+uv.lock
+.python-version
+.vscode
+z-tmp/
+
 Pipfile
 Pipfile.lock
 **__pycache__**

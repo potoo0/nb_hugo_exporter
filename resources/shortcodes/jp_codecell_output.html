@@ -1,0 +1,20 @@
+{{- /*
+Renders an jupyter codecell output.
+
+@param {int}    [ecnt] execution count
+@param {string} [dst] stdout/stderr
+
+@returns {template.HTML}
+
+@example {{< jp_codecell_output >}}
+@example {{< jp_codecell_output ecnt=1 dst=stdout >}}
+*/}}
+
+<!-- Get arguments-->
+{{- $ecnt := or (.Get "ecnt") (.Get 0) 0 }}
+{{- $dst := or (.Get "dst") (.Get 1) "stdout" }}
+
+<div class="jp-codecell jp-codecell-output jp-{{ $dst }}">
+  <div class="jp-prompt jp-OutputPrompt">Out[{{ $ecnt }}]:</div>
+  {{ .Inner | strings.TrimSpace | printf "```\n%s\n```" | .Page.RenderString }}
+</div>

@@ -1,0 +1,51 @@
+{# extends share/jupyter/nbconvert/templates/markdown/index.md.j2 #}
+{%- extends 'markdown/index.md.j2' -%}
+
+{%- block header -%}
++++
+{{ nb.metadata.hugo | toml_dumps -}}
++++
+{% endblock header %}
+
+{# ------------------- for input start #}
+{% block input %}
+{%- if not loop.last or (cell.source | length) != 0 %}
+{{ '{{< jp_codecell_input ecnt=' ~ cell.execution_count | replace(None, 0) ~ ' >}}' }}
+{{- super() -}}
+{{ '{{< /jp_codecell_input >}}' }}
+{% endif -%}
+{% endblock input %}
+{# ------------------- for input end #}
+
+{# ------------------- for outputs.output_type == 'execute_result' start #}
+{% block execute_result %}
+{{ '{{< jp_codecell_output ecnt=' ~ cell.execution_count | replace(None, 0) ~ ' dst="stdout" >}}' }}
+{% if 'application/json' in output.data -%}
+{{ output.data['application/json'] | tojson }}
+{% else %}
+{{- super() -}}
+{% endif -%}
+{{ '{{< /jp_codecell_output >}}' }}
+{% endblock execute_result %}
+
+{# for execute_result && type == 'text/plain'  #}
+{% block data_text scoped %}
+{{- output.data['text/plain'] -}}
+{% endblock data_text %}
+{# ------------------- for outputs.output_type == 'execute_result' end #}
+
+{# ------------------- for outputs.output_type == 'stream' start #}
+{% block stream %}
+{{ '{{< jp_codecell_output ecnt=' ~ cell.execution_count | replace(None, 0) ~ ' dst="' ~ output.name ~ '" >}}' }}
+{{ output.text -}}
+{{ '{{< /jp_codecell_output >}}' }}
+{% endblock stream %}
+
+{% block error %}
+{{ '{{< jp_codecell_output ecnt=' ~ cell.execution_count | replace(None, 0) ~ ' dst="stderr" >}}' }}
+{% for line in output.traceback -%}
+{{ line | strip_ansi }}
+{% endfor -%}
+{{ '{{< /jp_codecell_output >}}' }}
+{% endblock error %}
+{# ------------------- for outputs.output_type == 'stream' end #}

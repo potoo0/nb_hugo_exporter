@@ -1,2 +1,0 @@
-include nbhugoexporter/hugo_markdown.tpl
-include README.md LICENSE
